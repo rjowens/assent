@@ -339,10 +339,13 @@ defmodule Assent.Strategy.OIDC do
   defp validate_nonce(jwt, config) do
     IO.inspect "validate_nonce"
     IO.inspect config
-    config
-    |> Config.get(:session_params, %{})
-    |> Map.get(:nonce, nil)
-    |> validate_for_nonce(jwt)
+    case Config.get(config, :session_params, %{}) do
+      nil ->
+        validate_for_nonce(nil, jwt)
+      session_params ->
+        Map.get(session_params, :nonce, nil)
+        |> validate_for_nonce(jwt)
+    end
   end
 
   defp validate_for_nonce(nil, %{claims: %{"nonce" => _nonce}}),
