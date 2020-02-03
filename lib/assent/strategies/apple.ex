@@ -68,6 +68,8 @@ defmodule Assent.Strategy.Apple do
   @doc false
   @spec callback(Keyword.t(), map()) :: {:ok, %{user: map()}} | {:error, term()}
   def callback(config, params) do
+    IO.inspect "callback"
+    IO.inspect config
     with {:ok, client_secret} <- gen_client_secret(config) do
       config
       |> Config.put(:client_secret, client_secret)

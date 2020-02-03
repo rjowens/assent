@@ -220,6 +220,7 @@ defmodule Assent.Strategy.OIDC do
   @doc false
   @spec get_user(Config.t(), map()) :: {:ok, map()} | {:error, term()}
   def get_user(config, token) do
+    IO.inspect config
     with {:ok, openid_config} <- Config.fetch(config, :openid_configuration),
          {:ok, strategy}      <- Config.fetch(config, :strategy),
          {:ok, jwt}           <- validate_id_token(token["id_token"], openid_config, config) do
@@ -248,6 +249,7 @@ defmodule Assent.Strategy.OIDC do
   end
 
   defp peek_header(encoded, config) do
+    IO.inspect config
     with [header, _, _] <- String.split(encoded, "."),
          {:ok, json}    <- Base.url_decode64(header, padding: false) do
       Config.json_library(config).decode(json)
